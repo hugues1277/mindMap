@@ -1,6 +1,7 @@
 # MindMap
 
 **This project is part of the Aya project**
+
 This mindMap application allows to visually organize your information and shows the relationships between elements.
 
 ### Require
