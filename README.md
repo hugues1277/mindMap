@@ -4,7 +4,7 @@
 
 This mindMap application allows to visually organize your information and shows the relationships between elements.
 
-[**Demo**](https://sjtm.fr/gitDemo/mindMap/index.php)
+[**Demo**](https://sjtm.fr/demo/mindMap/index.php)
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/fred-sjtm/mindMap/master/img/capture1.png?raw=true" height="200">
