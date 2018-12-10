@@ -1,53 +1,48 @@
 <?php 
 function connexion()
 { 
-    try
-    {
-      
+    try{
 //************************************************************************** SERVER INFOS *****************************
       
   $VALEUR_hote='localhost';                 // database adress
   $VALEUR_port='3306';                      // database port (default 3306)
   $VALEUR_nom_bd='mindMap';                 // database name
 
-  $VALEUR_user='yourUser';                  // user name
-  $VALEUR_mot_de_passe='YourPass';          // password
+  $VALEUR_user='bob';                  // user name
+  $VALEUR_mot_de_passe='miraculus';          // password
       
 //************************************************************************** SERVER INFOS *****************************
 
   $bdd = new PDO('mysql:host='.$VALEUR_hote.';port='.$VALEUR_port.';dbname='.$VALEUR_nom_bd, $VALEUR_user, $VALEUR_mot_de_passe, array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8')); // MySQL connection
-    }
-    catch(Exception $e)
-    { 
+  
+  }catch(Exception $e){ 
     die('------------------------------------- Erreur : db ------------------------------------------');
   }
 return $bdd;
 }
 
 function afficher_database_table( $table, $order, $where )    // display data
-   {
-    if ($order){
-        $reponse = connexion()->query("SELECT * FROM $table ORDER BY +$order");
-    } else {
-        $reponse = connexion()->query("SELECT * FROM $table");
-    }
-  
-    $retours = array();
-    while ($donnees = $reponse->fetch())
-        {
-         $retours[]=$donnees;
-        }
-    $reponse->closeCursor(); // request end
-    return $retours;
-    }
+{
+if ($order){
+    $reponse = connexion()->query("SELECT * FROM $table ORDER BY +$order");
+} else {
+    $reponse = connexion()->query("SELECT * FROM $table");
+}
 
+$retours = array();
+while ($donnees = $reponse->fetch())
+    {
+      $retours[]=$donnees;
+    }
+$reponse->closeCursor(); // request end
+return $retours;
+}
 
 if($_POST['action']){
   
 function secure($string){
 	return addslashes( htmlentities($string,NULL,'UTF-8'));  //addslashes
 }
-
 $_ = array();
 foreach($_POST as $key=>$val){
 	$_[$key]=secure($val);

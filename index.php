@@ -15,24 +15,20 @@
   
 <?php 
 require_once ('./action.php');
-$modeles = afficher_database_table( "mindMap" );
-$nb_modeles = sizeof($modeles);
+$modeles = afficher_database_table( "mindMap" ); // get database mindmap
+$nb_modeles = sizeof($modeles); // if nb <3 -> display help infos
   
-if(isset($_GET['id'])){
+if(isset($_GET['id'])){   // get and display mindmap if get id in url
   $idMindMap=$_GET['id'];
-  require_once ('./action.php');
-  $modeles = afficher_database_table( "mindMap" );
   foreach ($modeles as $modele) {
-    //$modele=html_entity_decode( stripslashes ($modele)) ;
     if($modele['id']==$idMindMap){
-      $jsonMap =$modele['json'];// html_entity_decode( stripslashes ($modele['json']));
-      //$jsonMap = str_replace("null,","",$jsonMap);                  // rm null var
+      $jsonMap =$modele['json'];
       $name = $modele['name'];
       break;
     }}
   
   echo '<div class="openMapMenu">';
-}else{
+}else{                                  // if no id, display menu
   $jsonMap='{}';
   $idMindMap=0;
   echo '<div class="openMapMenu" style="display: block">';
@@ -45,31 +41,31 @@ foreach ($modeles as $modele) {
     .'<div class="openMapMenuElement" style="width:5%;" onclick="remove_mindMap('.$modele['id'].')">X</div></div>';
   }
 echo '</div>';
-  
-?>
-  
-  <?php $colors=["0, 105, 181","84, 199, 236","120, 160, 181","245, 195, 59","243, 83, 105","214, 150, 187","140, 114, 203","185,22,20","66, 183, 42","85, 183, 116","247, 146, 59","230, 133, 133"] ?>
 
-  
-<div class="rightMenu" id="rightMenuBubble" align="center">
+// color picker table
+$colors=["0, 105, 181","84, 199, 236","120, 160, 181","245, 195, 59","243, 83, 105","214, 150, 187","140, 114, 203","185,22,20","66, 183, 42","85, 183, 116","247, 146, 59","230, 133, 133"]; 
+?>
+
+<!-- right click menu when bubble is clicked -->  
+<div class="rightMenu" id="rightMenuBubble" align="center">                                             
   <div class="bpRightMenuBack" onclick="addBox(event)" ><div class="bpRightMenu bpAdd" ></div></div>
   <div class="bpRightMenuBack" onclick="addLink()" ><div class="bpRightMenu bpLink" ></div></div>
-  <!--div class="bpRightMenuBack" onclick="quitMenu(); viewdetails(event,'')" ><div class="bpRightMenu bpShow" ></div></div-->
   <div class="bpRightMenuBack" onclick="removeBox()" ><div class="bpRightMenu bpRemove" ></div></div>
   <br>
   <?php
   $i=0;
-  foreach($colors as $color){
+  foreach($colors as $color){ // color picker
     echo '<div class="bpRightMenuBack bpColor" style="background-color:rgb('.$color.');" onclick="bubbleColor(this.style.backgroundColor )" ></div>';
     $i++;    if($i==6)      echo '<br>';
   }  ?>
 </div>
   
+<!-- right click menu when line is clicked  -->  
 <div class="rightMenu" id="rightMenuLine" align="center">
   <div class="bpRightMenuBack" onclick="removeLine()" ><div class="bpRightMenu bpRemove" ></div></div>
   <div class="bpRightMenu ColorMini" style="display:inline-block;">
     <?php $i=0;
-    foreach($colors as $color){
+    foreach($colors as $color){ // color picker
       if(!$i){
         echo '<div class="bpRightMenuBack bpColorMini" style="background-color:rgb(0,0,0); border: 1px solid grey; width:8px; height:8px;" onclick="lineColor(this.style.backgroundColor )" ></div>';
         $i++;
@@ -84,6 +80,7 @@ echo '</div>';
 
   <!--************************************************************************************************************************************-->
 
+<!-- corner menu with save/update/search/... -->
 <div class="angle" <?php if(!$name){ echo "hidden"; } ?>><?php if($name){ echo $name; }else{ echo 'MindMap'; } ?></div>
   <div hidden id="rond">	
     <div id="rond0" class="rond" onclick="previous()" title="Previous"><img src="script/img/previous.png"></div>
@@ -124,12 +121,10 @@ echo '</div>';
 </div>
 <input type="search" id="search" placeholder="Search" val=""></input>
   
-  
-  
-
   <!--************************************************************************************************************************************-->
   
   
+<!-- color menu setting -->  
 <div class="colorMenu" align="center">
   
   <div class="colorMenuBody" style=" width:90%; height:105px; position:absolute; top:20px; left:5%;"></div>
@@ -152,24 +147,24 @@ echo '</div>';
   </div>
 </div>
   
-  
   <!--************************************************************************************************************************************-->
-  <div class="message">Welcome to mindMap</div>
 
-  <div class="quitMenu" onclick="quitMenu()" oncontextmenu="quitMenu(); return false"></div>
   
-  <iframe  class="iframePage" src=""></iframe>
-  <div class="iframePageRound rond" onclick="showWebPage()"><img src="script/img/previous.png"></div>
+  <div class="message">Welcome to mindMap</div> <!-- msg box -->
+  <div class="quitMenu" onclick="quitMenu()" oncontextmenu="quitMenu(); return false"></div> <!-- quitt menu box -->
+  
+  <iframe  class="iframePage" src=""></iframe> <!-- iframe to display another web site -->
+  <div class="iframePageRound rond" onclick="showWebPage()"><img src="script/img/previous.png"></div><!-- return bp -->
 
-  <div class="details" oncontextmenu="/*rightClick(event);*/ return false" align="center">
+  <div class="details" oncontextmenu="/*rightClick(event);*/ return false" align="center"><!-- detail box -->
 
+    <!-- text editor -->    
     <input type="text" class="detailsTitle" onchange="editBubbleTitle(this.id,this.value)" value="" onkeypress="if(event.keyCode==13) document.getElementById('editeur').focus(); ">
     <div class="buttonEdit" >
-
       <input type="button" value="G" style="font-weight: bold;" onclick="commande('bold');" />
       <input type="button" value="I" style="font-style: italic;" onclick="commande('italic');" />
       <input type="button" value="S" style="text-decoration: underline;" onclick="commande('underline');" />
-      
+    
       <input type="button" value="RF" onclick="commande('removeFormat');" />
 
       <input type="button" value="←" onclick="commande('undo');" /> 
@@ -204,14 +199,15 @@ echo '</div>';
         }  ?>
       </div>
     </div>
-    <div class="closeDetails" onclick="openDetails()"></div>
-    <div id="editeur" class="detailsText" contentEditable="true"></div>
+    <div class="closeDetails" onclick="openDetails()"></div> <!-- button close details -->
+    <div id="editeur" class="detailsText" contentEditable="true"></div> <!-- textarea with div -->
     <!--textarea class="detailsText" placeholder="Description"></textarea-->
-    <input type="text" class="detailsUrl" placeholder="Web site" onchange="editBubbleUrl(this.value)" oninput="editBubbleUrl(this.value)" >
-    <div class="bpUrl" ondblclick="showWebPage('dbl')"></div>
+    <input type="text" class="detailsUrl" placeholder="Web site" onchange="editBubbleUrl(this.value)" oninput="editBubbleUrl(this.value)" ><!-- msg box -->
+    <div class="bpUrl" onclick="showWebPage()"></div><!-- load url in iframe -->
     <a href="" target="blank" class="Url" hidden ></a>
   </div>
  
+  <!-- the mindmap box -->
   <div id="Main" class="mapBox" onmouseup="globalLine(); globalBubble()" oncontextmenu="/*rightClick(event);*/ return false"></div>
   
 </body>  
@@ -220,26 +216,24 @@ echo '</div>';
 <script>
 //**********************************************************************************************************************************
 
-var jsonMap= <?php echo $jsonMap ?>;
+var jsonMap= <?php echo $jsonMap ?>;  // get json mindMap and his id
 var idMindMap= <?php echo $idMindMap ?>;
 
-
-
-$( function() {
+$( function() {     
   if(idMindMap){
     globalBubbleCreate()
     setId(jsonMap["bubble"][0]["id"])
-    $('.angle').click(); openCorner(); $(".quitMenu").fadeOut(10)
+    $('.angle').click(); openCorner(); $(".quitMenu").fadeOut(10) // display menu
   }
   setTimeout(" window.scrollTo(4500-(screen.width/2),  4200-(screen.height/2));",'50');  
   
-  if(<?php echo $nb_modeles; ?> <3 && $(".mapBox").children().length<10){
+  if(<?php echo $nb_modeles; ?> <3 && $(".mapBox").children().length<10){ // display help if it's firts projects
     setTimeout("$('.arrows').fadeIn(500);",'1000');
   }
   
 });
 
-window.onbeforeunload = function()   // blocker si on actualise
+window.onbeforeunload = function()   // disable reload of page
 { 
   /*if( $('.openMapMenu').css("display")=="none" && editMode){
     update_mindMap()
@@ -252,7 +246,7 @@ window.onbeforeunload = function()   // blocker si on actualise
 editMode=0 
 $(".buttonEdit").css('display','none');
   
-function setEditMode(){
+function setEditMode(){ // display or not editor buttons for edit mode
   globalLine()
   if(editMode){  
     
@@ -272,13 +266,13 @@ function setEditMode(){
       $('.details').find('.detailsUrl').removeAttr("readonly")
       $('.buttonEdit').fadeIn(1000)
     }
-  $('.mapBox').empty()
+  $('.mapBox').empty()  // reset mapbox
   globalBubbleCreate()
   quitMenu()
   $('#search').fadeIn(200)
   setId(jsonMap["bubble"][0]["id"])
 }
-function openColorMenu(){
+function openColorMenu(){ // right menu with color
   openDetails(0)
   quitMenu()
   setTimeout("$('.quitMenu').fadeIn(500);",'500');
@@ -286,32 +280,29 @@ function openColorMenu(){
   $('.colorMenu').find('.bubble').css('background-color',jsonMap["setting"]["bubbleColor"])
   $('.colorMenu').find('.formLine').css('background-color',jsonMap["setting"]["lineColor"])
 }
-function settingColor(id,color){
+function settingColor(id,color){  // color menu setting
   openDetails(0)
   jsonMap["setting"][id]=color
   $('.colorMenu').find('.bubble').css('background-color',jsonMap["setting"]["bubbleColor"])
   $('.colorMenu').find('.formLine').css('background-color',jsonMap["setting"]["lineColor"])
 }
-function openMapMenu(){
+function openMapMenu(){ // open or not map menu
   openDetails(0)
   quitMenu()
   setTimeout("$('.quitMenu').fadeIn(500);",'500');
   $('.openMapMenu').fadeIn(200)
 }
-function quitMenu(){
-  //$('.details').fadeOut(700) 
+function quitMenu(){  // quit all menus
   $('.rightMenu').fadeOut(200) 
   $(".quitMenu").fadeOut(200)
   $('.colorMenu').fadeOut(200)
   $('.openMapMenu').fadeOut(200)
   $('#search').fadeOut(200)
   quitter_angle()
-  globalLine()
-  //console.log(jsonMap)
-  
+  globalLine()  
 }
 open=0;
-function openDetails(n){
+function openDetails(n){  // open details in left
   initialScrollX = window.pageXOffset || document.documentElement.scrollLeft;
 	initialScrollY = window.pageYOffset || document.documentElement.scrollTop;
   if(n){
@@ -328,7 +319,7 @@ function openDetails(n){
   }
   $('#search').fadeIn(200)
 }
-function showWebPage(page){
+function showWebPage(page){ // open url / if dbl click open in new page
   if(page=="dbl"){
     window.open($('.details').find('.Url').attr("href"));
   }else if( $('.iframePage').css("display")!="none" && page !="" ){
@@ -798,7 +789,7 @@ $('#Main').mousedown(function(e){
    initMove(e)  
 });
  
-// ******************************************************************************************************** angle
+// ******************************************************************************************************** corner
 enableQuitt=1
 $('.angle').hover(function(){
 		openCorner()
@@ -835,7 +826,7 @@ function quitter_angle(){
   }
 }  
   
-// ******************************************************************************************************** db
+// ******************************************************************************************************** database functions
 function inserer_mindMap(){
   
   PromptBox("Nom:",'', function() {  
@@ -898,7 +889,7 @@ function remove_mindMap(id){
   })	
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// messages
   
 var timeout1, timeout2
 function afficherMessage(message){
