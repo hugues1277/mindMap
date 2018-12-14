@@ -8,8 +8,8 @@ function connexion()
   $VALEUR_port='3306';                      // database port (default 3306)
   $VALEUR_nom_bd='mindMap';                 // database name
 
-  $VALEUR_user='bob';                  // user name
-  $VALEUR_mot_de_passe='miraculus';          // password
+  $VALEUR_user='';                  // user name
+  $VALEUR_mot_de_passe='';          // password
       
 //************************************************************************** SERVER INFOS *****************************
 
