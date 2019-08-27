@@ -8,8 +8,8 @@ function connexion()
   $VALEUR_port='3306';                      // database port (default 3306)
   $VALEUR_nom_bd='mindMap';                 // database name
 
-  $VALEUR_user='';                  // user name
-  $VALEUR_mot_de_passe='';          // password
+  $VALEUR_user='fredy';                       // user name
+  $VALEUR_mot_de_passe='tdEgapmtgIDH90tU';         // password
       
 //************************************************************************** SERVER INFOS *****************************
 
@@ -21,24 +21,24 @@ function connexion()
 return $bdd;
 }
 
-function afficher_database_table( $table, $order, $where )    // display data
+function afficher_database_table( $table, $order )    // display data
 {
-if ($order){
-    $reponse = connexion()->query("SELECT * FROM $table ORDER BY +$order");
-} else {
-    $reponse = connexion()->query("SELECT * FROM $table");
+  if ($order){
+      $reponse = connexion()->query("SELECT * FROM $table ORDER BY $order");
+  } else {
+      $reponse = connexion()->query("SELECT * FROM $table");
+  }
+
+  $retours = array();
+  while ($donnees = $reponse->fetch())
+      {
+        $retours[]=$donnees;
+      }
+  $reponse->closeCursor(); // request end
+  return $retours;
 }
 
-$retours = array();
-while ($donnees = $reponse->fetch())
-    {
-      $retours[]=$donnees;
-    }
-$reponse->closeCursor(); // request end
-return $retours;
-}
-
-if($_POST['action']){
+if(isset($_POST['action'])){
   
 function secure($string){
 	return addslashes( htmlentities($string,NULL,'UTF-8'));  //addslashes

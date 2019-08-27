@@ -14,10 +14,11 @@
 <body>
   
 <?php 
+//ini_set('display_errors', 1);
 require_once ('./action.php');
-$modeles = afficher_database_table( "mindMap" ); // get database mindmap
+$modeles = afficher_database_table( "mindMap",0 ); // get database mindmap
 $nb_modeles = sizeof($modeles); // if nb <3 -> display help infos
-  
+
 if(isset($_GET['id'])){   // get and display mindmap if get id in url
   $idMindMap=$_GET['id'];
   foreach ($modeles as $modele) {
@@ -81,7 +82,7 @@ $colors=["0, 105, 181","84, 199, 236","120, 160, 181","245, 195, 59","243, 83, 1
   <!--************************************************************************************************************************************-->
 
 <!-- corner menu with save/update/search/... -->
-<div class="angle" <?php if(!$name){ echo "hidden"; } ?>><?php if($name){ echo $name; }else{ echo 'MindMap'; } ?></div>
+<div class="angle" <?php if(empty($name)){ echo "hidden"; } ?>><?php if(isset($name)){ echo $name; }else{ echo 'MindMap'; } ?></div>
   <div hidden id="rond">	
     <div id="rond0" class="rond" onclick="previous()" title="Previous"><img src="script/img/previous.png"></div>
     <div id="rond1" class="rond" onclick="next()" title="next"><img src="script/img/next.png"></div>
